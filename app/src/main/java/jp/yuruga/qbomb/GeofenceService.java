@@ -28,6 +28,7 @@ import static jp.yuruga.qbomb.common.Constants.*;
 public class GeofenceService extends Service {
 
     public static final String ACTION_REFRESH_GEOFENCES = "jp.yuruga.qbomb.action_refresh_geofences";
+    public static final String ACTION_NOTIFY_BOMBED = "jp.yuruga.qbomb.action_notify_bombed";
 
     // Holds the location client
     private GoogleApiClient mGoogleApiClient;
@@ -79,9 +80,12 @@ public class GeofenceService extends Service {
         String action = intent.getAction();
         if(ACTION_REFRESH_GEOFENCES.equals(action))
         {
-
             String fenceId = intent.getStringExtra("id");
             requestNewGeofences(fenceId);
+        }else if(ACTION_NOTIFY_BOMBED.equals(action))
+        {
+            String bombId = intent.getStringExtra("id");
+            requestNewGeofences(bombId);
         }
 
         return super.onStartCommand(intent, flags, startId);
