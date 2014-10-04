@@ -31,7 +31,7 @@ public class QCardModel extends CardModel {
     private String answer1;
 
 
-	public QCardModel(String question, String answer0, String answer1) {
+	public QCardModel(String question) {
 		super();
         this.question = question;
         this.answer0 = answer0;
@@ -46,11 +46,11 @@ public class QCardModel extends CardModel {
         return question;
     }
 
-    public String getAnswer0() {
+    /*public String getAnswer0() {
         return  answer0;
     }
 
     public String getAnswer1() {
         return answer1;
-    }
+    }*/
 }

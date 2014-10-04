@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.res.Resources;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
@@ -65,7 +66,7 @@ public class AnswerActivity extends Activity {
                 }else
                 {
                     log("error is "+e.getMessage());
-                    onQuestionRetrieved(result);
+                    onQuestionRetrieved(null);
                 }
             }
         });
@@ -74,48 +75,60 @@ public class AnswerActivity extends Activity {
     private void onQuestionRetrieved(HashMap<String,String> result)//String result)
     {
         //make dummy
-        try {
-            String dummyResult = "{id:'dummyBombId',question:'くえすちょん？', answer_0:'いえす！',answer_1:'NO!!'}";
-            JSONObject resultJSON = new JSONObject(dummyResult);
 
-            mCardContainer = (CardContainer) findViewById(R.id.cardContainer);
-            Resources r = getResources();
-            QuestionCardStackAdapter adapter = new QuestionCardStackAdapter(this);
-            //adapter.add(new CardModel(resultJSON.getString("question"), "Description goes here", r.getDrawable(R.drawable.picture1)));
-
-            final String bombId = resultJSON.getString("id");
-            //CardModel cardModel = new CardModel(resultJSON.getString("question"), resultJSON.getString("answer_0"), r.getDrawable(R.drawable.picture1));
-            QCardModel cardModel = new QCardModel(result.get("question"), result.get("answer_0"), result.get("answer_1"));
-            cardModel.setOnClickListener(new CardModel.OnClickListener() {
-                @Override
-                public void OnClickListener() {
-                    log("I am pressing the card");
-                }
-            });
-
-            cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-                @Override
-                public void onLike() {
-                    log("I like the card");
-                    sendResult(bombId,1);
-                }
-
-                @Override
-                public void onDislike()
-                {
-                    log("I dislike the card");
-                    sendResult(bombId,0);
-                }
-            });
-
-            adapter.add(cardModel);
-
-            mCardContainer.setAdapter(adapter);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(result == null)
+        {
+            result = new HashMap<String, String>();
+            result.put("id", "IDdummy");
+            result.put("question", "くえすちょん？くえすちょん？");
+            result.put("answer_0", "答え０答え０");
+            result.put("answer_1", "答え1答え1");
         }
+
+
+        mCardContainer = (CardContainer) findViewById(R.id.cardContainer);
+        Resources r = getResources();
+        QuestionCardStackAdapter adapter = new QuestionCardStackAdapter(this);
+        //adapter.add(new CardModel(resultJSON.getString("question"), "Description goes here", r.getDrawable(R.drawable.picture1)));
+
+        final String bombId = result.get("id");
+
+
+        TextView answer0Field = (TextView) findViewById(R.id.answer_0);
+        TextView answer1Field = (TextView) findViewById(R.id.answer_1);
+        answer0Field.setText(result.get("answer_0"));
+        answer1Field.setText(result.get("answer_1"));
+
+        //CardModel cardModel = new CardModel(resultJSON.getString("question"), resultJSON.getString("answer_0"), r.getDrawable(R.drawable.picture1));
+        QCardModel cardModel = new QCardModel(result.get("question"));//, result.get("answer_0"), result.get("answer_1"));
+        cardModel.setOnClickListener(new CardModel.OnClickListener() {
+            @Override
+            public void OnClickListener() {
+                log("I am pressing the card");
+            }
+        });
+
+        cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+            @Override
+            public void onLike() {
+                log("I like the card");
+                sendResult(bombId,1);
+            }
+
+            @Override
+            public void onDislike()
+            {
+                log("I dislike the card");
+                sendResult(bombId,0);
+            }
+        });
+
+        adapter.add(cardModel);
+
+        mCardContainer.setAdapter(adapter);
+
+
+
     }
 
     private void sendResult(String id, int answer)
