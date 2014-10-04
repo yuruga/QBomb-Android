@@ -16,6 +16,11 @@ import android.widget.Toast;
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+
+import java.util.HashMap;
 
 import static jp.yuruga.qbomb.common.Share.*;
 import static jp.yuruga.qbomb.common.Constants.*;
@@ -43,6 +48,20 @@ public class AnswerActivity extends Activity {
         log("AnswerActivity:onResume with bomb_id: "+intent.getStringExtra("bomb_id"));
         Toast.makeText(this, "AnswerActivity:onResume with bomb_id: "+intent.getStringExtra("bomb_id"),
                 Toast.LENGTH_LONG).show();
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", intent.getStringExtra("bomb_id"));
+        ParseCloud.callFunctionInBackground("getBomb", params, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    log("result is "+result);
+                    // result is "Hello world!"
+                }else
+                {
+                    log("error is "+e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
@@ -54,11 +73,11 @@ public class AnswerActivity extends Activity {
 
 
         setContentView(R.layout.activity_answer);
-        if (savedInstanceState == null) {
+       /* if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
-        }
+        }*/
 
         mCardContainer = (CardContainer) findViewById(R.id.cardContainer);
 
@@ -67,34 +86,7 @@ public class AnswerActivity extends Activity {
         SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(this);
 
         adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title6", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title2", "Description goes here", r.getDrawable(R.drawable.picture2)));
-        adapter.add(new CardModel("Title3", "Description goes here", r.getDrawable(R.drawable.picture3)));
-        adapter.add(new CardModel("Title4", "Description goes here", r.getDrawable(R.drawable.picture1)));
-        adapter.add(new CardModel("Title5", "Description goes here", r.getDrawable(R.drawable.picture2)));
+
 
         CardModel cardModel = new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1));
         cardModel.setOnClickListener(new CardModel.OnClickListener() {
