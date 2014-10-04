@@ -27,15 +27,32 @@ public class AnswerActivity extends Activity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        log("AnswerActivity:onNewIntent");
+        super.onNewIntent(intent);
         log("AnswerActivity:onNewIntent with bomb_id: "+intent.getStringExtra("bombId"));
         Toast.makeText(this, "AnswerActivity:onNewIntent with bomb_id: "+intent.getStringExtra("bombId"),
                 Toast.LENGTH_LONG).show();
-        super.onNewIntent(intent);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        log("AnswerActivity:onResume with bomb_id: "+intent.getStringExtra("bomb_id"));
+        Toast.makeText(this, "AnswerActivity:onResume with bomb_id: "+intent.getStringExtra("bomb_id"),
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        log("AnswerActivity:onCreate");
         super.onCreate(savedInstanceState);
+
+
+
+
         setContentView(R.layout.activity_answer);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
