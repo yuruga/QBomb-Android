@@ -24,6 +24,11 @@ public class DubugActivity extends Activity {
         Intent i = new Intent(this,GeofenceService.class);
         startService(i);
     }
+    public void onStartAnswerButtonClicked(View view)
+    {
+        Intent i = new Intent(this,AnswerActivity.class);
+        startActivity(i);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
