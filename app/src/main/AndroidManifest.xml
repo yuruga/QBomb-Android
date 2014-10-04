@@ -32,17 +32,19 @@
 
         <activity
             android:name="jp.yuruga.qbomb.AnswerActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
             <!--<intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>-->
         </activity>
-        <activity
+        <!--<activity
             android:name="jp.yuruga.qbomb.QuestionActivity"
-            android:label="@string/title_activity_question" >
-        </activity>
+            android:label="@string/title_activity_question"
+            >
+        </activity>-->
 
         <service
             android:name="jp.yuruga.qbomb.GeofenceService"
@@ -67,7 +69,15 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
+        <!--<receiver android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>-->
+        <receiver android:name="jp.yuruga.qbomb.QuestionReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
