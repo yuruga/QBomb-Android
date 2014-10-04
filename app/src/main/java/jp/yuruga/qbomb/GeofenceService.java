@@ -342,7 +342,7 @@ public class GeofenceService extends Service implements LocationListener {
         double disLat = er * diffLat;
         double disLon = Math.cos(Math.PI / 180 * fLat) * er * diffLon;
         double dis = Math.sqrt(Math.pow(disLon, 2) + Math.pow(disLat, 2));
-        return dis;// * 1000;
+        return dis * 1000;
     }
 
 

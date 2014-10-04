@@ -63,11 +63,6 @@ public class QuestionReceiver extends ParsePushBroadcastReceiver {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
-
-
     }
 
 
