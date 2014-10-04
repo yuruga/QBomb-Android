@@ -47,7 +47,7 @@ public class QuestionReceiver extends ParsePushBroadcastReceiver {
         JSONObject json = null;
         try {
             json = new JSONObject(b.getString("com.parse.Data"));
-            String bombId = json.getString("bomb_id");
+            String bombId = json.getString("id");
             String lat = json.getString("lat");
             String lon = json.getString("lon");
             String rad = json.getString("radius");

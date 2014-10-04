@@ -25,6 +25,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import jp.yuruga.qbomb.model.QCardModel;
+
 import static jp.yuruga.qbomb.common.Share.*;
 import static jp.yuruga.qbomb.common.Constants.*;
 
@@ -54,8 +56,8 @@ public class AnswerActivity extends Activity {
 
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("id", intent.getStringExtra("bomb_id"));
-        ParseCloud.callFunctionInBackground("getBomb", params, new FunctionCallback<String>() {
-            public void done(String result, ParseException e) {
+        ParseCloud.callFunctionInBackground("getBomb", params, new FunctionCallback<HashMap<String,String>>() {
+            public void done(HashMap<String,String> result, ParseException e) {
                 if (e == null) {
                     log("result is "+result);
                     // result is "Hello world!"
@@ -69,7 +71,7 @@ public class AnswerActivity extends Activity {
         });
     }
 
-    private void onQuestionRetrieved(String result)
+    private void onQuestionRetrieved(HashMap<String,String> result)//String result)
     {
         //make dummy
         try {
@@ -78,11 +80,12 @@ public class AnswerActivity extends Activity {
 
             mCardContainer = (CardContainer) findViewById(R.id.cardContainer);
             Resources r = getResources();
-            SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(this);
+            QuestionCardStackAdapter adapter = new QuestionCardStackAdapter(this);
             //adapter.add(new CardModel(resultJSON.getString("question"), "Description goes here", r.getDrawable(R.drawable.picture1)));
 
             final String bombId = resultJSON.getString("id");
-            CardModel cardModel = new CardModel(resultJSON.getString("question"), resultJSON.getString("answer_0"), r.getDrawable(R.drawable.picture1));
+            //CardModel cardModel = new CardModel(resultJSON.getString("question"), resultJSON.getString("answer_0"), r.getDrawable(R.drawable.picture1));
+            QCardModel cardModel = new QCardModel(result.get("question"), result.get("answer_0"), result.get("answer_1"));
             cardModel.setOnClickListener(new CardModel.OnClickListener() {
                 @Override
                 public void OnClickListener() {
