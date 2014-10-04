@@ -2,6 +2,7 @@ package jp.yuruga.qbomb;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,17 +11,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.res.Resources;
+import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
 
+import static jp.yuruga.qbomb.common.Share.*;
 import static jp.yuruga.qbomb.common.Constants.*;
 
 
 public class AnswerActivity extends Activity {
 
     private CardContainer mCardContainer;
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        log("AnswerActivity:onNewIntent with bomb_id: "+intent.getStringExtra("bombId"));
+        Toast.makeText(this, "AnswerActivity:onNewIntent with bomb_id: "+intent.getStringExtra("bombId"),
+                Toast.LENGTH_LONG).show();
+        super.onNewIntent(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
