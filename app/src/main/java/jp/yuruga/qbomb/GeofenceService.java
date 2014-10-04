@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -19,6 +20,8 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.Wearable;
 
@@ -31,7 +34,7 @@ import java.util.ArrayList;
 import static jp.yuruga.qbomb.common.Share.*;
 import static jp.yuruga.qbomb.common.Constants.*;
 
-public class GeofenceService extends Service {
+public class GeofenceService extends Service implements LocationListener {
 
     public static final String ACTION_REFRESH_GEOFENCES = "jp.yuruga.qbomb.action_refresh_geofences";
     public static final String ACTION_NOTIFY_BOMBED = "jp.yuruga.qbomb.action_notify_bombed";
@@ -41,6 +44,10 @@ public class GeofenceService extends Service {
 
     // Holds the location client
     private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private long mLocationRequestInterval;
+    private long mLocationRequestFastestInterval;
+    private boolean isListeningLocation;
     private GoogleApiClient.ConnectionCallbacks mConnectionCallBacks = new GoogleApiClient.ConnectionCallbacks() {
         @Override
         public void onConnected(Bundle bundle) {
@@ -49,6 +56,12 @@ public class GeofenceService extends Service {
 
             //remove all geofences for debug
             removeAllGeoFences();
+
+            //start monitoring location
+            if(!isListeningLocation)
+            {
+                startListeningLocationUpdates();
+            }
         }
 
         @Override
@@ -78,6 +91,10 @@ public class GeofenceService extends Service {
     public void onCreate() {
         super.onCreate();
         log("GeofenceServiceOnCreate");
+
+        mLocationRequestInterval = (long)(getResources().getInteger(R.integer.location_update_interval_s)*1000);
+        mLocationRequestFastestInterval = (long)(getResources().getInteger(R.integer.location_update_fastest_interval_s)*1000);
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 //.addApi(Wearable.API)
                 .addApi(LocationServices.API)
@@ -85,6 +102,8 @@ public class GeofenceService extends Service {
                 .addOnConnectionFailedListener(mConnectionFailedListener)
                 .build();
         mGoogleApiClient.connect();
+        isListeningLocation = false;
+        startListeningLocationUpdates();
     }
 
     @Override
@@ -106,15 +125,25 @@ public class GeofenceService extends Service {
                 String bombId = intent.getStringExtra("bomb_id");
                 //requestNewGeofences(bombId);
                 //check if location inside fence
-                log("creating dummy geofence");
+                log("push received");
                 double lat = intent.getDoubleExtra("lat",0);
                 double lon = intent.getDoubleExtra("lon",0);
                 float radius = intent.getFloatExtra("radius", 100f);
                 //put dummy data
-                JSONArray fenceData = new JSONArray();
+                /*JSONArray fenceData = new JSONArray();
                 JSONObject data1 = new JSONObject();
                 fenceData.put(createGeofenceJSONOBject(lat, lon, radius, "fffenceid", bombId));
-                addGeoFences(fenceData);
+                addGeoFences(fenceData);*/
+                Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                double d = getDistance(lat,lon,lastLocation.getLatitude(),lastLocation.getLongitude());
+                log("distance is :"+d+" m");
+                if(d<radius)
+                {
+                    Intent i = new Intent(this, GeofenceService.class);
+                    i.putExtra("bomb_id", bombId);
+                    i.setAction(ACTION_NOTIFY_BOMBED);
+                    startService(i);
+                }
 
             }else if(ACTION_NOTIFY_BOMBED.equals(action)) {
                 String bombId = intent.getStringExtra("bomb_id");
@@ -279,5 +308,47 @@ public class GeofenceService extends Service {
 
     }
 
+    public void startListeningLocationUpdates()
+    {
+        log("%%StartListening%%");
+        if(mGoogleApiClient.isConnected())
+        {
+            mLocationRequest = LocationRequest.create();
+            // Use high accuracy
+            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            mLocationRequest.setInterval(mLocationRequestInterval);
+            mLocationRequest.setFastestInterval(mLocationRequestFastestInterval);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            isListeningLocation = true;
+            log("%%StartListening2222%%");
+        }
 
+    }
+
+    public void stopListeningLocationUpdates()
+    {
+        if(mGoogleApiClient.isConnected())
+        {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,this);
+            isListeningLocation = false;
+        }
+    }
+
+
+    public double getDistance(double fLat, double fLon, double tLat, double tLon){
+        double er = 6378.137f;
+        double diffLat = Math.PI / 180 * (tLat - fLat);
+        double diffLon = Math.PI / 180 * (tLon - fLon);
+        double disLat = er * diffLat;
+        double disLon = Math.cos(Math.PI / 180 * fLat) * er * diffLon;
+        double dis = Math.sqrt(Math.pow(disLon, 2) + Math.pow(disLat, 2));
+        return dis;// * 1000;
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        log("location:" + location.toString());
+
+    }
 }
