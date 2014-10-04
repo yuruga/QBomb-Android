@@ -6,11 +6,48 @@
     tools:context=".AnswerActivity"
     tools:ignore="MergeRootFrame" >
 
-<com.andtinder.view.CardContainer
-android:id="@+id/cardContainer"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:layout_weight="1"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    </FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/answer_0"
+            android:background="@color/positive_color"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
+            android:layout_gravity="top"
+            android:layout_weight="2"
+            android:singleLine="true"
+            android:paddingTop="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/answer_1"
+            android:background="@color/negative_color"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal|bottom"
+            android:textColor="@android:color/white"
+            android:layout_weight="2"
+            android:paddingBottom="20dp" />
+    </LinearLayout>
+
+    <com.andtinder.view.CardContainer
+android:id="@+id/cardContainer"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_weight="1"
+        android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:layout_marginTop="75dp"
+        android:layout_marginBottom="75dp" />
+
+</FrameLayout>
 

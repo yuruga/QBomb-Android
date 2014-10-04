@@ -428,9 +428,15 @@ public class CardContainer extends AdapterView<ListAdapter> {
 			Log.d("Fling", "Fling with " + velocityX + ", " + velocityY);
 			final View topCard = mTopCard;
 			float dx = e2.getX() - e1.getX();
-			if (Math.abs(dx) > mTouchSlop &&
+
+            float dy = e2.getY() - e1.getY();
+
+			/*if (Math.abs(dx) > mTouchSlop &&
 					Math.abs(velocityX) > Math.abs(velocityY) &&
-					Math.abs(velocityX) > mFlingSlop * 3) {
+					Math.abs(velocityX) > mFlingSlop * 3) {*/
+            if (Math.abs(dy) > mTouchSlop &&
+                    Math.abs(velocityY) > Math.abs(velocityX) &&
+                    Math.abs(velocityY) > mFlingSlop * 3) {
 				float targetX = topCard.getX();
 				float targetY = topCard.getY();
 				long duration = 0;
@@ -452,7 +458,8 @@ public class CardContainer extends AdapterView<ListAdapter> {
 					mTopCard.setLayerType(LAYER_TYPE_HARDWARE, null);
 
                 if (cardModel.getOnCardDimissedListener() != null) {
-                    if ( targetX > 0 ) {
+                    //if ( targetX > 0 ) {
+                    if ( targetY > 0 ) {
                         cardModel.getOnCardDimissedListener().onDislike();
                     } else {
                         cardModel.getOnCardDimissedListener().onLike();

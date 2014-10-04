@@ -33,8 +33,8 @@ public final class QuestionCardStackAdapter extends CardStackAdapter {
 
         //((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
         ((TextView) convertView.findViewById(R.id.question)).setText(qCardModel.getQustion());
-        ((TextView) convertView.findViewById(R.id.answer_0)).setText(qCardModel.getAnswer0());
-        ((TextView) convertView.findViewById(R.id.answer_1)).setText(qCardModel.getAnswer1());
+        /*((TextView) convertView.findViewById(R.id.answer_0)).setText(qCardModel.getAnswer0());
+        ((TextView) convertView.findViewById(R.id.answer_1)).setText(qCardModel.getAnswer1());*/
 
         return convertView;
     }
