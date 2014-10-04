@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "qbomb.yuruga.jp.qbomb"
+        applicationId "jp.yuruga.qbomb"
         minSdkVersion 16
         targetSdkVersion 20
         versionCode 1
@@ -25,5 +25,7 @@ android {
 }
 
 dependencies {
+    compile project(':AndTinder')
+    compile project(':common')
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
