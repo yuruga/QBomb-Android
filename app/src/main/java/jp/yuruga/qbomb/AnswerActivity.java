@@ -17,12 +17,18 @@ import android.widget.Toast;
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 
 import java.util.HashMap;
 
@@ -83,6 +89,7 @@ public class AnswerActivity extends Activity {
             result.put("question", "くえすちょん？くえすちょん？");
             result.put("answer_0", "答え０答え０");
             result.put("answer_1", "答え1答え1");
+            //translate();
         }
 
 
@@ -112,14 +119,14 @@ public class AnswerActivity extends Activity {
             @Override
             public void onLike() {
                 log("I like the card");
-                sendResult(bombId,1);
+                sendResult(bombId,0);
             }
 
             @Override
             public void onDislike()
             {
                 log("I dislike the card");
-                sendResult(bombId,0);
+                sendResult(bombId,1);
             }
         });
 
@@ -136,19 +143,34 @@ public class AnswerActivity extends Activity {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("id", id);
         params.put("answer", answer);
-        ParseCloud.callFunctionInBackground("answer", params, new FunctionCallback<String>() {
-            public void done(String result, ParseException e) {
+        ParseCloud.callFunctionInBackground("answer", params,null);
+        finish();
+        /*new FunctionCallback<JSONObject>() {
+            public void done(JSONObject result, ParseException e) {
                 if (e == null) {
                     log("result is "+result);
                     finish();
-
                 }else
                 {
                     log("error is "+e.getMessage());
                     finish();
                 }
             }
-        });
+        });*/
+    }
+
+    private void translate()
+    {
+        try {
+            HttpResponse<JsonNode> response = Unirest.get("https://leonardoscorza-translate-text-v1.p.mashape.com/translate?languageConverted=en&languageToConvert=pt&text=Hi+mister")
+                    .header("X-Mashape-Key", "heeETp88GymshAKR6H4bZoEBRKDrp164J8Yjsnk6q2D38JLGHn")
+                    .asJson();
+            log("ttttttttttttttttt"+response.getBody().getObject().get("answer"));
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
