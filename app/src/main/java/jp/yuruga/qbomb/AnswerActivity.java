@@ -20,6 +20,9 @@ import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import static jp.yuruga.qbomb.common.Share.*;
@@ -56,13 +59,82 @@ public class AnswerActivity extends Activity {
                 if (e == null) {
                     log("result is "+result);
                     // result is "Hello world!"
+                    onQuestionRetrieved(result);
                 }else
                 {
                     log("error is "+e.getMessage());
+                    onQuestionRetrieved(result);
                 }
             }
         });
     }
+
+    private void onQuestionRetrieved(String result)
+    {
+        //make dummy
+        try {
+            String dummyResult = "{id:'dummyBombId',question:'くえすちょん？', answer_0:'いえす！',answer_1:'NO!!'}";
+            JSONObject resultJSON = new JSONObject(dummyResult);
+
+            mCardContainer = (CardContainer) findViewById(R.id.cardContainer);
+            Resources r = getResources();
+            SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(this);
+            //adapter.add(new CardModel(resultJSON.getString("question"), "Description goes here", r.getDrawable(R.drawable.picture1)));
+
+            final String bombId = resultJSON.getString("id");
+            CardModel cardModel = new CardModel(resultJSON.getString("question"), resultJSON.getString("answer_0"), r.getDrawable(R.drawable.picture1));
+            cardModel.setOnClickListener(new CardModel.OnClickListener() {
+                @Override
+                public void OnClickListener() {
+                    log("I am pressing the card");
+                }
+            });
+
+            cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+                @Override
+                public void onLike() {
+                    log("I like the card");
+                    sendResult(bombId,1);
+                }
+
+                @Override
+                public void onDislike()
+                {
+                    log("I dislike the card");
+                    sendResult(bombId,0);
+                }
+            });
+
+            adapter.add(cardModel);
+
+            mCardContainer.setAdapter(adapter);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendResult(String id, int answer)
+    {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("id", id);
+        params.put("answer", answer);
+        ParseCloud.callFunctionInBackground("answer", params, new FunctionCallback<String>() {
+            public void done(String result, ParseException e) {
+                if (e == null) {
+                    log("result is "+result);
+                    finish();
+
+                }else
+                {
+                    log("error is "+e.getMessage());
+                    finish();
+                }
+            }
+        });
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,38 +151,7 @@ public class AnswerActivity extends Activity {
                     .commit();
         }*/
 
-        mCardContainer = (CardContainer) findViewById(R.id.cardContainer);
 
-        Resources r = getResources();
-
-        SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(this);
-
-        adapter.add(new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1)));
-
-
-        CardModel cardModel = new CardModel("Title1", "Description goes here", r.getDrawable(R.drawable.picture1));
-        cardModel.setOnClickListener(new CardModel.OnClickListener() {
-            @Override
-            public void OnClickListener() {
-                Log.i("Swipeable Cards", "I am pressing the card");
-            }
-        });
-
-        cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
-            @Override
-            public void onLike() {
-                Log.i("Swipeable Cards","I like the card");
-            }
-
-            @Override
-            public void onDislike() {
-                Log.i("Swipeable Cards","I dislike the card");
-            }
-        });
-
-        adapter.add(cardModel);
-
-        mCardContainer.setAdapter(adapter);
     }
 
 
