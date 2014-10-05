@@ -160,11 +160,11 @@ public class GeofenceService extends Service implements LocationListener {
     {
         //main notification
         NotificationCompat.Builder notifBulder = new NotificationCompat.Builder(this)
-                .setContentTitle("タイトル")
-                .setContentText("from hogehoge")
+                .setContentTitle("Chotto")
+                .setContentText("You have a new Enquete.")
                 .setSound(Uri.parse("android.resource://jp.mdnht.drawmessenger/raw/yo"))
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS)
-                .setSmallIcon(R.drawable.common_signin_btn_icon_dark);
+                .setSmallIcon(R.drawable.icon);
 
 
         // Create an intent for the reply action

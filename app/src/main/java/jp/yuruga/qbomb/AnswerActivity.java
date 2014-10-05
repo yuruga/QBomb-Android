@@ -17,16 +17,17 @@ import android.widget.Toast;
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
-import com.mashape.unirest.http.HttpResponse;
+/*import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.http.exceptions.UnirestException;*/
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 
 
@@ -159,7 +160,7 @@ public class AnswerActivity extends Activity {
         });*/
     }
 
-    private void translate()
+   /* private void translate()
     {
         try {
             HttpResponse<JsonNode> response = Unirest.get("https://leonardoscorza-translate-text-v1.p.mashape.com/translate?languageConverted=en&languageToConvert=pt&text=Hi+mister")
@@ -171,7 +172,7 @@ public class AnswerActivity extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     @Override
