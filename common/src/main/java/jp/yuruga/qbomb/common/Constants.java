@@ -5,6 +5,10 @@ package jp.yuruga.qbomb.common;
  */
 public class Constants {
 
-    public  static  final  String PARSE_APP_ID = "qLdLZCyLBR44faAPEoajj8glXEYUaA90YYQfDvWW";
-    public  static  final  String PARSE_APP_KEY = "WK70K1zvXuuNYsjQeVdjsAW0LKhmO1u5HjBxwyyj";
+    //Prod
+    public  static  final  String PARSE_APP_ID = "erRGYguFhbXFb8TJQxBOWP8Ir2LpgdZuEBWQnfhH";
+    public  static  final  String PARSE_APP_KEY = "oYK14mumK1mBjqJ8NJrY8Yd6E6uDWL1f9yK7BDNR";
+    //Dev
+//    public  static  final  String PARSE_APP_ID = "qLdLZCyLBR44faAPEoajj8glXEYUaA90YYQfDvWW";
+//    public  static  final  String PARSE_APP_KEY = "WK70K1zvXuuNYsjQeVdjsAW0LKhmO1u5HjBxwyyj";
 }
